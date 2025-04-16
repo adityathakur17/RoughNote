@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { auth } from "@clerk/nextjs/server";
 import { request } from "@arcjet/next";
@@ -37,49 +37,46 @@ export async function createCollection(data) {
     }
 
     const user = await db.user.findUnique({
-        where: { clerkUserId: userId },
-      });
+      where: { clerkUserId: userId },
+    });
 
-      if (!user) {
-        throw new Error("User not found");
-      }
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-      const collection = await db.collection.create({
-        data:{
-            name:data.name,
-            description:data.description,
-            userId:user.id
-        }
-      })
+    const collection = await db.collection.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        userId: user.id,
+      },
+    });
 
-      revalidatePath("/dashboard")
-      return collection
+    revalidatePath("/dashboard");
+    return collection;
   } catch (error) {
-    throw new Error(error.message)
+    throw new Error(error.message);
   }
 }
 
 export async function getCollections() {
-      const { userId } = await auth();
-      if (!userId) throw new Error("Unauthorized");
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
 
-      const user = await db.user.findUnique({
-          where: { clerkUserId: userId },
-        });
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
 
-        if (!user) {
-          throw new Error("User not found");
-        }
-  
-        const collections = await db.collection.findMany({
-          where:{
-              userId:user.id
-          },
-          orderBy:{createdAt: "desc"}
-        })
-  
-
-        return collections
-    
+  if (!user) {
+    throw new Error("User not found");
   }
 
+  const collections = await db.collection.findMany({
+    where: {
+      userId: user.id,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return collections;
+}

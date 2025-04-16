@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { createCollection, getCollections } from "@/actions/collection";
+import CollectionForm from "@/components/collection-dialogue";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -36,27 +37,23 @@ const JournalEntryPage = () => {
     data: actionResult,
   } = useFetch(createJournalEntry);
 
-
   const {
     loading: collectionsLoading,
     fn: fetchCollections,
     data: collections,
   } = useFetch(getCollections);
 
-
   const {
     loading: createCollectionLoading,
     fn: createCollectionFn,
-    data: createdCollection  ,
+    data: createdCollection,
   } = useFetch(createCollection);
 
+  useEffect(() => {
+    fetchCollections();
+  }, []);
 
-  useEffect(()=>{
-    fetchCollections()
-  },[])
-
-  
-  const isLoading = actionLoading;
+  console.log(collections, "collections");
 
   const {
     register,
@@ -64,6 +61,7 @@ const JournalEntryPage = () => {
     control,
     formState: { errors },
     getValues,
+    setValue,
   } = useForm({
     resolver: zodResolver(journalSchema),
     defaultValues: {
@@ -85,6 +83,20 @@ const JournalEntryPage = () => {
     }
   }, [actionResult, actionLoading]);
 
+  useEffect(() => {
+    if (createdCollection) {
+      setIsCollectionDialogueOpen(false);
+      fetchCollections();
+      setValue("collectionId", createdCollection.id);
+      toast.success(`Collection ${createdCollection.name} created!`);
+    }
+  }, [createdCollection]);
+
+  const handleCreateCollection = async (data) => {
+    createCollectionFn(data);
+  };
+
+
   const onSubmit = handleSubmit(async (data) => {
     const mood = getMoodById(data.mood);
 
@@ -95,6 +107,7 @@ const JournalEntryPage = () => {
     });
   });
 
+  const isLoading = actionLoading || collectionsLoading;
   return (
     <div className="py-8">
       <form className="space-y-4 mx-auto" onSubmit={onSubmit}>
@@ -126,7 +139,9 @@ const JournalEntryPage = () => {
               return (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger
-                    className={errors.mood ? "border-red-500" : ""}
+                    className={`w-full md:w-[1200px]  ${
+                      errors.mood ? "border-red-500" : ""
+                    }`}
                   >
                     <SelectValue placeholder="How is your mood" />
                   </SelectTrigger>
@@ -199,24 +214,29 @@ const JournalEntryPage = () => {
                     if (value === "new") {
                       setIsCollectionDialogueOpen(true);
                     } else {
-                      field.onChange;
+                      field.onChange(value);
                     }
                   }}
                   value={field.value}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className={"w-full md:w-[1200px]"}>
                     <SelectValue placeholder="Choose a collection" />
                   </SelectTrigger>
                   <SelectContent>
-                    {collections.map((collection) => {
+                    {collections?.map((collection) => {
                       return (
-                        <SelectItem key={collection.id} value={collection.id}>
-                          {" "}
+                        <SelectItem
+                          key={collection.id}
+                          value={collection.id}
+                        >
+                          {collection.name}
                         </SelectItem>
                       );
                     })}
-                    <SelectItem>
-                      <span className="text-green-700">+ Create New Collection</span>
+                    <SelectItem value="new">
+                      <span className="text-green-700">
+                        + Create New Collection
+                      </span>
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -231,11 +251,18 @@ const JournalEntryPage = () => {
         </div>
 
         <div className="space-y-4 flex">
-          <Button type="submit" variant="journal">
+          <Button type="submit" variant="journal" disabled={actionLoading}>
             Publish
           </Button>
         </div>
       </form>
+
+      <CollectionForm
+        loading={createCollectionLoading}
+        onSuccess={handleCreateCollection}
+        open={isCollectionDialogueOpen}
+        setOpen={setIsCollectionDialogueOpen}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use server";
 
-import { MOODS } from "@/lib/moods";
+import { getMoodById, MOODS } from "@/lib/moods";
 import { auth } from "@clerk/nextjs/server";
 import { getPixabayImage } from "./public";
 import { db } from "@/lib/prisma";
@@ -14,30 +14,29 @@ export async function createJournalEntry(data) {
     if (!userId) throw new Error("Unauthorized");
 
     //Arcjet Rate Limiting
-    const req = await request()
+    const req = await request();
 
-    const decision = await aj.protect(req,{
+    const decision = await aj.protect(req, {
       userId,
-      requested:1
-    })
+      requested: 1,
+    });
 
-    if(decision.isDenied()){
-      if(decision.reason.isRateLimit()){
-        const {remaining, reset} = decision.reason
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        const { remaining, reset } = decision.reason;
 
         console.error({
-          code:"RATE_LIMIT_EXCEEDED",
-          details:{
+          code: "RATE_LIMIT_EXCEEDED",
+          details: {
             remaining,
-            resetInSeconds:reset
-          }
+            resetInSeconds: reset,
+          },
         });
 
-        throw new Error("Too many requests. Please try again later.")
+        throw new Error("Too many requests. Please try again later.");
       }
-      throw new Error("Request Blocked.")
+      throw new Error("Request Blocked.");
     }
-
 
     const user = await db.user.findUnique({
       where: { clerkUserId: userId },
@@ -74,5 +73,57 @@ export async function createJournalEntry(data) {
     return entry;
   } catch (error) {
     throw new Error(error.message);
+  }
+}
+
+export async function getJournalEntries({ collectionId, orderBy = "desc" }={}) {
+  try {
+    const { userId } = await auth();
+
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: {
+        clerkUserId: userId,
+      },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const entries = await db.entry.findMany({
+      where: {
+        userId: user.id,
+        ...(collectionId === "unorganized"
+          ? { collectionId: null }
+          : collectionId
+          ? { collectionId }
+          : {}),
+      },
+      include: {
+        collection: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: orderBy,
+      },
+    });
+
+    const entriesWithMoodData = entries.map((entry) => ({
+      ...entry,
+      moodData: getMoodById(entry.mood),
+    }));
+
+    return {
+      success: true,
+      data: {
+        entries: entriesWithMoodData,
+      },
+    };
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 }
