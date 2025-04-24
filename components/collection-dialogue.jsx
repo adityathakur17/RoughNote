@@ -4,10 +4,8 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +13,7 @@ import { collectionSchema } from "@/lib/schema";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { BarLoader } from "react-spinners";
+import { BarLoader } from "react-spinners"; 
 
 const CollectionForm = ({ onSuccess, open, setOpen, loading }) => {
   const {
@@ -38,15 +36,15 @@ const CollectionForm = ({ onSuccess, open, setOpen, loading }) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Collection</DialogTitle>
+          <DialogTitle >Create New Collection</DialogTitle>
         </DialogHeader>
         {loading && <BarLoader color="green" width={"100%"} />}
         <form onSubmit={onSubmit} className="space-y-2">
           <div className="space-y-2">
             <label className="text-sm font-medium">Collection Name</label>
             <Input
-              readOnly={loading}
-              {...register("name")}
+              readOnly={loading} //what?
+              {...register("name")}//what?
               placeholder="Enter collection name..."
               className={` ${errors.name ? "border-red-500" : ""}`}
             />

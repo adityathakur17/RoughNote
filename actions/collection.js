@@ -35,7 +35,8 @@ export async function createCollection(data) {
       }
       throw new Error("Request Blocked.");
     }
-
+    //Arcjet rate limiting
+    
     const user = await db.user.findUnique({
       where: { clerkUserId: userId },
     });
