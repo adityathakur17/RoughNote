@@ -39,7 +39,7 @@ const JournalEntryPage = () => {
 
   const {
     loading: collectionsLoading,
-    fn: fetchCollections,
+    fn: fetchCollections, //does this do the basic fetching that use-fetch does?
     data: collections,
   } = useFetch(getCollections);
 
@@ -49,11 +49,9 @@ const JournalEntryPage = () => {
     data: createdCollection,
   } = useFetch(createCollection);
 
-  useEffect(() => {
+  useEffect(() => { //what does this do
     fetchCollections();
   }, []);
-
-  console.log(collections, "collections");
 
   const {
     register,
@@ -86,8 +84,8 @@ const JournalEntryPage = () => {
   useEffect(() => {
     if (createdCollection) {
       setIsCollectionDialogueOpen(false);
-      fetchCollections();
-      setValue("collectionId", createdCollection.id);
+      fetchCollections();//where can we see this fetching?
+      setValue("collectionId", createdCollection.id);//what does this do
       toast.success(`Collection ${createdCollection.name} created!`);
     }
   }, [createdCollection]);

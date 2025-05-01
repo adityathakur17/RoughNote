@@ -36,7 +36,7 @@ export async function createCollection(data) {
       throw new Error("Request Blocked.");
     }
     //Arcjet rate limiting
-    
+
     const user = await db.user.findUnique({
       where: { clerkUserId: userId },
     });
@@ -74,10 +74,32 @@ export async function getCollections() {
 
   const collections = await db.collection.findMany({
     where: {
-      userId: user.id,
+      userId: user.id, //why did we do this what does it mean why didnt we use clerkId is the same as clerkId?
     },
     orderBy: { createdAt: "desc" },
   });
 
   return collections;
+}
+
+export async function getCollection(collectionId) {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
+
+  const user = await db.user.findUnique({
+    where: {
+      clerkUserId: userId,
+    },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const collection = await db.collection.findFirst({
+    where: {
+      userId: user.id,
+      id: collectionId,
+    },
+  });
+
+  return collection;
 }

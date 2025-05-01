@@ -95,7 +95,7 @@ export async function getJournalEntries({ collectionId, orderBy = "desc" }={}) {
         userId: user.id,
         ...(collectionId === "unorganized"
           ? { collectionId: null }
-          : collectionId
+          : collectionId  //if there is a collection id it will fetch the collection id
           ? { collectionId }
           : {}),
       },

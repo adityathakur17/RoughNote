@@ -43,7 +43,7 @@ const CollectionForm = ({ onSuccess, open, setOpen, loading }) => {
           <div className="space-y-2">
             <label className="text-sm font-medium">Collection Name</label>
             <Input
-              readOnly={loading} //what?
+              readOnly={loading} 
               {...register("name")}//what?
               placeholder="Enter collection name..."
               className={` ${errors.name ? "border-red-500" : ""}`}
