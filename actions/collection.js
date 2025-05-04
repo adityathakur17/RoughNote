@@ -89,7 +89,7 @@ export async function getCollection(collectionId) {
   const user = await db.user.findUnique({
     where: {
       clerkUserId: userId,
-    },
+    },  
   });
 
   if (!user) throw new Error("User not found");
@@ -102,4 +102,31 @@ export async function getCollection(collectionId) {
   });
 
   return collection;
+}
+
+export async function deleteCollection(collectionId){
+  try {
+    const {userId} = await auth()
+  if(!userId) throw new Error("User not found")
+
+    const collection = await db.collection.findFirst({
+      where:{
+        userId:user.id,
+        id:collectionId
+      }
+    })
+
+    if(!collection) throw new Error("Collection not found")
+
+    await db.collection.delete({
+      where:{
+        id:collectionId
+      }
+    })
+    return true;
+  } catch (error) {
+      throw new Error(error.message)
+  }
+  
+    
 }

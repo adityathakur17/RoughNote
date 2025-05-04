@@ -76,7 +76,10 @@ export async function createJournalEntry(data) {
   }
 }
 
-export async function getJournalEntries({ collectionId, orderBy = "desc" }={}) {
+export async function getJournalEntries({
+  collectionId,
+  orderBy = "desc",
+} = {}) {
   try {
     const { userId } = await auth();
 
@@ -95,8 +98,8 @@ export async function getJournalEntries({ collectionId, orderBy = "desc" }={}) {
         userId: user.id,
         ...(collectionId === "unorganized"
           ? { collectionId: null }
-          : collectionId  //if there is a collection id it will fetch the collection id
-          ? { collectionId }
+          : collectionId
+          ? { collectionId: collectionId }
           : {}),
       },
       include: {
