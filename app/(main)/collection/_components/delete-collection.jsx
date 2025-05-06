@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -22,29 +21,28 @@ function DeleteCollectionDialog({ collection, entriesCount = 0 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const {loading:isDeleting,
-    fn:deleteCollectionFn,
-    data:deletedCollection,
-  } = useFetch(deleteCollection)
+  const {
+    loading: isDeleting,
+    fn: deleteCollectionFn,
+    data: deletedCollection,
+  } = useFetch(deleteCollection);
 
-  useEffect(()=>{
-    return()=>{
-      if(deletedCollection && !isDeleting){
-        setOpen(false)
+  useEffect(() => {
+    return () => {
+      if (deletedCollection && !isDeleting) {
+        setOpen(false);
         toast.error(
-          `Collection "${collection.name} and all its entries deleted`
-        )
+          `Collection "${collection.name} and all its entries deleted` //how did we get the collection name here
+        );
 
-        router.push("/dashboard")
+        router.push("/dashboard");
       }
-    }
-  },[deletedCollection, isDeleting])
+    };
+  }, [deletedCollection, isDeleting]);
 
-  const handleDelete = ()=>{
-    deleteCollectionFn(collection.id)
-  }
-
-
+  const handleDelete = () => {
+    deleteCollectionFn(collection.id);
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -75,7 +73,13 @@ function DeleteCollectionDialog({ collection, entriesCount = 0 }) {
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button onClick={handleDelete} className="bg-red-500 hover:bg-red-600" disabled={isDeleting}>{isDeleting ? "Deleting " : "Delete Collection"}</Button>
+          <Button
+            onClick={handleDelete}
+            className="bg-red-500 hover:bg-red-600"
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting " : "Delete Collection"}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

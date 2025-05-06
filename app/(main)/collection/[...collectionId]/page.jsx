@@ -1,4 +1,5 @@
 //why is this a server component
+//add drag and drop functionality
 import { getCollection } from "@/actions/collection";
 import { getJournalEntries } from "@/actions/journal";
 import DeleteCollectionDialog from "../_components/delete-collection";

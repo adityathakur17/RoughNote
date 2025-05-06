@@ -94,6 +94,17 @@ export async function getCollection(collectionId) {
 
   if (!user) throw new Error("User not found");
 
+    // Handle special case for "unorganized" entries
+    if (collectionId === "unorganized") {
+      return {
+        id: "unorganized",
+        name: "Unorganized Entries",
+        description: "Entries that haven't been added to any collection",
+        userId: user.id,
+      };
+    }
+
+
   const collection = await db.collection.findFirst({
     where: {
       userId: user.id,
@@ -108,6 +119,12 @@ export async function deleteCollection(collectionId){
   try {
     const {userId} = await auth()
   if(!userId) throw new Error("User not found")
+
+    const user = await db.user.findUnique({
+      where:{
+        clerkUserId:userId
+      }
+    })
 
     const collection = await db.collection.findFirst({
       where:{
