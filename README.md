@@ -1,5 +1,5 @@
-#RoughNote
-##Live Link: [RoughNote](https://roughnote.vercel.app/)
+# RoughNote
+## Live Link: [RoughNote](https://roughnote.vercel.app/)
 
 
 RoughNote is a journaling app, which helps people reflect on their journey. Users can track their
@@ -7,6 +7,12 @@ moods, create collections for specific areas of life, example: Personal and Care
 for anyone who wants to live a more meaningful and fuller life.
 A dedicated Mood Tracking feature with graphical Visualization!
 Tech Stack: Next.js, Clerk, PrismaDB, Arcjet
+
+## Key Features:
+- Dedicated Dashboard with Mood Visualization Graph and overall staistics
+- Option to create collections for different aspects of your life
+- A Rich editor with a toolbar for making your journals extra beautiful
+- Mood tracking system
 
 ## Getting Started
 First install the dependencies:
