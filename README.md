@@ -8,7 +8,7 @@ for anyone who wants to live a more meaningful and fuller life.
 A dedicated Mood Tracking feature with graphical Visualization!
 
 ## Key Features:
-- Dedicated Dashboard with Mood Visualization Graph and overall staistics
+- Dedicated Dashboard with Mood Visualization Graph and overall statistics
 - Option to create collections for different aspects of your life
 - A Rich editor with a toolbar for making your journals extra beautiful
 - Mood tracking system
