@@ -15,6 +15,7 @@ import { checkUser } from "@/lib/checkUser";
 
 const Header = async() => {
   await checkUser()
+
   return (
     <header className="container mx-auto">
       <nav className="py-6 px-4 flex justify-between items-center">
