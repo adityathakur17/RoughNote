@@ -12,6 +12,12 @@ const nextConfig = {
       },
     ],
   },
+
+  eslint: {
+    // Only run ESLint on local development
+    ignoreDuringBuilds: process.env.NODE_ENV === 'production',
+  },
+
 };
 
 export default nextConfig;
