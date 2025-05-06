@@ -18,7 +18,7 @@ A dedicated Mood Tracking feature with graphical Visualization!
 ## Getting Started
 First install the dependencies:
 ```bash
-npm instal --legacy-peer-deps
+npm install --legacy-peer-deps
 ```
 
 Run the development server:
