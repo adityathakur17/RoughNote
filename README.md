@@ -13,7 +13,7 @@ A dedicated Mood Tracking feature with graphical Visualization!
 - A Rich editor with a toolbar for making your journals extra beautiful
 - Mood tracking system
 
-## Tech Stack: Next.js, Clerk, PrismaDB, Arcjet
+## Tech Stack: Next.js, Clerk, Prisma, NeonDB, Arcjet
 
 ## Getting Started
 First install the dependencies:
