@@ -8,7 +8,7 @@ import JournalFilters from "../_components/journal-filters";
 
 
 const CollectionPage = async ({params}) => {
-  const { collectionId } = params;
+  const { collectionId } = await params;
   const id = Array.isArray(collectionId) ? collectionId[0] : collectionId;
   //providing the getJournalEntries with the collectionId
   const collection = await getCollection( id );

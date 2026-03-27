@@ -28,8 +28,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { createCollection, getCollections } from "@/actions/collection";
+import { generateReflectionPrompts } from "@/actions/agents/llm/reflection";
 import CollectionForm from "@/components/collection-dialogue";
-import { isDirty } from "zod";
 import { Loader2 } from "lucide-react";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
@@ -55,9 +55,11 @@ const JournalEntryPage = () => {
     fn: fetchDraft,
   } = useFetch(getDraft);
 
-
-
-  const { loading: savingDraft, fn: saveDraftFn, data:savedDraft } = useFetch(saveDraft); //why do we need different loading states for different functions, diff for getdraft, diff for saveDraft etc
+  const {
+    loading: savingDraft,
+    fn: saveDraftFn,
+    data: savedDraft,
+  } = useFetch(saveDraft); //why do we need different loading states for different functions, diff for getdraft, diff for saveDraft etc
 
   const {
     loading: actionLoading,
@@ -77,6 +79,12 @@ const JournalEntryPage = () => {
     data: createdCollection,
   } = useFetch(createCollection);
 
+  const {
+    loading: reflectionLoading,
+    fn: fetchReflectionQuestions,
+    data: reflectionQuestions,
+  } = useFetch(generateReflectionPrompts);
+
   useEffect(() => {
     //what does this do
     fetchCollections();
@@ -94,12 +102,11 @@ const JournalEntryPage = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors,isDirty },
+    formState: { errors, isDirty },
     getValues,
     setValue,
     reset,
-    watch
-    
+    watch,
   } = useForm({
     resolver: zodResolver(journalSchema),
     defaultValues: {
@@ -109,6 +116,8 @@ const JournalEntryPage = () => {
       collectionId: "",
     },
   });
+
+  const contentValue = useWatch({ control, name: "content" });
 
   useEffect(() => {
     if (isEditMode && existingEntry) {
@@ -145,7 +154,7 @@ const JournalEntryPage = () => {
       router.push(
         `/collection/${
           actionResult.collectionId ? actionResult.collectionId : "unorganized"
-        }`
+        }`,
       );
       toast.success(`Entry ${isEditMode ? "updated" : "created"} successfully`);
     }
@@ -164,21 +173,31 @@ const JournalEntryPage = () => {
     createCollectionFn(data);
   };
 
-  const formData = watch()
+  const handleGenerateReflection = async () => {
+    const entryText = contentValue?.toString().trim();
+    if (!entryText) {
+      toast.error("Please add some content to generate reflection questions.");
+      return;
+    }
 
-  const handleSaveDraft=async()=>{
-    if(!isDirty){
+    await fetchReflectionQuestions( entryText );
+  };
+
+  const formData = watch();
+
+  const handleSaveDraft = async () => {
+    if (!isDirty) {
       toast.error("No change to save");
       return;
     }
 
-   await saveDraftFn(formData)
-  }
-  useEffect(()=>{
-    if(savedDraft?.success&& !savingDraft){
-      toast.success("Draft saved successfully")
+    await saveDraftFn(formData);
+  };
+  useEffect(() => {
+    if (savedDraft?.success && !savingDraft) {
+      toast.success("Draft saved successfully");
     }
-  },[savedDraft,savingDraft])
+  }, [savedDraft, savingDraft]);
   const onSubmit = handleSubmit(async (data) => {
     const mood = getMoodById(data.mood);
 
@@ -196,7 +215,8 @@ const JournalEntryPage = () => {
     collectionsLoading ||
     entryLoading ||
     draftLoading ||
-    savingDraft;
+    savingDraft ||
+    reflectionLoading;
   return (
     <div className="py-8">
       <form className="space-y-4 mx-auto" onSubmit={onSubmit}>
@@ -286,6 +306,35 @@ const JournalEntryPage = () => {
           {errors.content && (
             <p className="text-red-500 text-sm">{errors.content.message}</p>
           )}
+
+          <div className="flex items-center gap-2 mt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGenerateReflection}
+              disabled={reflectionLoading || !contentValue?.trim()}
+            >
+              {reflectionLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                "Get Reflection Questions"
+              )}
+            </Button>
+          </div>
+
+          {reflectionQuestions && Array.isArray(reflectionQuestions) && (
+            <div className="border rounded-md bg-slate-50 p-4 mt-3">
+              <p className="font-semibold mb-2">Reflection Questions</p>
+              <ol className="list-decimal pl-5 space-y-1">
+                {reflectionQuestions.map((question, idx) => (
+                  <li key={idx}>{question}</li>
+                ))}
+              </ol>
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -337,28 +386,33 @@ const JournalEntryPage = () => {
         </div>
 
         <div className="space-y-4 flex gap-2">
-
-        {!isEditMode && (<Button 
-          onClick={handleSaveDraft}
-          type="button"
-          variant="outline"
-          disabled={savingDraft||!isDirty}>
-            {savingDraft && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+          {!isEditMode && (
+            <Button
+              onClick={handleSaveDraft}
+              type="button"
+              variant="outline"
+              disabled={savingDraft || !isDirty}
+            >
+              {savingDraft && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save as Draft
-          </Button>)}
-
+            </Button>
+          )}
 
           <Button type="submit" variant="journal" disabled={actionLoading}>
             {isEditMode ? "Update" : "Publish"}
           </Button>
 
-          {isEditMode && (<Button 
-          onClick={(e)=>{e.preventDefault();
-            router.push(`/journal/${existingEntry.id}`)
-          }}
-          variant="destructive">
+          {isEditMode && (
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                router.push(`/journal/${existingEntry.id}`);
+              }}
+              variant="destructive"
+            >
               Cancel
-          </Button>)}
+            </Button>
+          )}
         </div>
       </form>
 
