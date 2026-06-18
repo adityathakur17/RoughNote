@@ -7,6 +7,7 @@ import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
+import { createEntryEmbedding } from "./agents/rag/embeddings";
 
 export async function createJournalEntry(data) {
   try {
@@ -63,6 +64,11 @@ export async function createJournalEntry(data) {
         collectionId: data.collectionId || null,
       },
     });
+    try {
+      await createEntryEmbedding(entry)
+    } catch (error) {
+      console.error('Failed to create embedding:', error)
+    }
 
     await db.draft.deleteMany({
       where: { userId: user.id },
