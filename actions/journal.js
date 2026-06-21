@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
 import aj from "@/lib/arcjet";
 import { createEntryEmbedding } from "./agents/rag/embeddings";
+import { answerQuestion } from "./agents/rag/searchEntries";
 
 export async function createJournalEntry(data) {
   try {
@@ -66,6 +67,12 @@ export async function createJournalEntry(data) {
     });
     try {
       await createEntryEmbedding(entry)
+      // const answer = await answerQuestion(
+      //   "Where did i write about travelling in the north country fare features",
+      //   entry.collectionId,
+      //   entry.userId
+      // )
+      // console.log("ANSWER",answer)
     } catch (error) {
       console.error('Failed to create embedding:', error)
     }

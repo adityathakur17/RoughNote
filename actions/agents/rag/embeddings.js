@@ -6,8 +6,7 @@ const openai = new OpenAI({
 });
 
 export async function createEntryEmbedding(entry) {
-    console.log("Entry is ", entry)
-  const textToEmbed = `
+    const textToEmbed = `
 Title: ${entry.title}
 
 Mood: ${entry.mood}
