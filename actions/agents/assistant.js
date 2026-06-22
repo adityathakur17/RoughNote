@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/prisma";
-import { answerQuestion } from "./agents/rag/searchEntries";
+import { answerQuestion } from "./rag/searchEntries";
 
 export async function askJournalAssistant(
   question,

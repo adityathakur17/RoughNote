@@ -21,8 +21,9 @@ import { Button } from "@/components/ui/button";
 import { format, isSameDay } from "date-fns";
 import { cn } from "@/lib/utils";
 import EntryCard from "@/components/entry-card";
+import ChatWindow from "@/components/collection-chat/chat-window";
 
-function JournalFilters({ entries }) {
+function JournalFilters({ entries, collectionId }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
   const [date, setDate] = useState(null);
@@ -137,7 +138,9 @@ function JournalFilters({ entries }) {
             <EntryCard key={entry.id} entry={entry} />
           ))}
         </div>
+
       )}
+      <ChatWindow collectionId={collectionId} />
     </>
   );
 }

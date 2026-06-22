@@ -6,6 +6,7 @@ import CollectionForm from "@/components/collection-dialogue";
 import useFetch from "@/hooks/use-fetch";
 import { createCollection } from "@/actions/collection";
 import { toast } from "sonner";
+import ChatWindow from "@/components/collection-chat/chat-window";
 
 const Collections = ({ collections = {}, entriesByCollection }) => {
   const [isCollectionDialogueOpen, setIsCollectionDialogueOpen] =

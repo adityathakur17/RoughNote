@@ -36,7 +36,7 @@ const CollectionPage = async ({params}) => {
         )}
       </div>
       {/* render entries */}
-      <JournalFilters entries={entries.data?.entries} />
+      <JournalFilters entries={entries.data?.entries} collectionId={id} />
 
   
     </div>
