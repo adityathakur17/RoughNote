@@ -28,10 +28,11 @@ export default function ChatWindow({ collectionId }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: userQuestion, collectionId }),
       });
-
-      if (!res.ok) throw new Error("Network response was not ok");
-
       const data = await res.json();
+      if(!res.ok){
+      throw new Error(data.error ||"Something went wrong")
+      }
+      
       const response = data.answer ?? "No response";
 
       setMessages((prev) => [
@@ -42,7 +43,7 @@ export default function ChatWindow({ collectionId }) {
       console.error(error);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Something went wrong. Please try again." },
+        { role: "assistant", content: error instanceof Error?error.message:"Something went wrong" },
       ]);
     } finally {
       setLoading(false);
