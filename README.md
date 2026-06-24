@@ -15,7 +15,7 @@ A dedicated Mood Tracking feature with graphical Visualization!
 - Option to create collections for different aspects of your life
 - A Rich editor with a toolbar for making your journals extra beautiful
 - Mood tracking system
-  **Key AI features**
+### **Key AI features**
 - **Assistant (LLM):** an API-backed conversational assistant for writing help and reflection. See [app/api/assistant/route.js](app/api/assistant/route.js).
 
 **Primary focus:** the AI assistant and the Retrieval-Augmented Generation (RAG) pipeline.
