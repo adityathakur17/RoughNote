@@ -44,6 +44,7 @@ Environment variables
 - **ARCJET_KEY** — Arcjet rate-limiting key (see [lib/arcjet.js](lib/arcjet.js)).
 - **DATABASE_URL** — Prisma/Postgres connection string (see [prisma/schema.prisma](prisma/schema.prisma)).
 - **OPENAI_API_KEY** (or other LLM provider key) — required if using a hosted LLM for the assistant.
+- **GEMINI_API_KEY** - required for generating Reflection Questions
 
 Running locally
 
