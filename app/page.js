@@ -16,6 +16,7 @@ import {
   FileText,
   Lock,
   Sparkles,
+  MessageSquare,
 } from "lucide-react";
 import Link from "next/link";
 import faqs from "@/data/faqs";
@@ -30,9 +31,9 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "Daily Inspiration",
+    title: "Dedicated AI Assistant",
     description:
-      "Get inspired with daily prompts and mood-based imagery to spark your creativity.",
+      "Keep Track of your thoughts and creativity with a companion in your collections",
   },
   {
     icon: Lock,
@@ -43,7 +44,7 @@ const features = [
 ];
 
 export default async function Home() {
-  const advice = await getDailyPrompt()
+  const advice = await getDailyPrompt();
 
   return (
     <div className="relative container mx-auto px-4 pt-16 pb-16">
@@ -77,7 +78,7 @@ export default async function Home() {
             </div>
             <div className="space-y-4 p-4">
               <h3 className="text-xl font-semibold text-green-900">
-                {advice?advice:"My Thouhts Today"}
+                {advice ? advice : "My Thouhts Today"}
               </h3>
               <Skeleton className="h-4 bg-green-200 rounded w-3/4" />
               <Skeleton className="h-4 bg-green-200 rounded full" />
@@ -125,6 +126,115 @@ export default async function Home() {
         ))}
       </section>
       <div className="space-y-24 mt-24">
+        {/* AI Assistant Section */}
+        <div className="grid md:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <div className="rounded-full bg-green-100 h-12 w-12 flex items-center justify-center">
+              <Sparkles className="h-6 w-6 text-green-700" />
+            </div>
+            <h3 className="text-2xl font-bold text-green-900">
+              AI Journal Assistant
+            </h3>
+            <p className="text-lg text-green-700">
+              Meet your personal journaling companion, available right inside
+              your Collection view:
+            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Ask questions about your past entries</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Discover patterns across your writing</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Get thoughtful, context-aware responses</span>
+              </li>
+            </ul>
+          </div>
+          <div className="space-y-4 bg-white rounded-2xl shadow-xl p-6 border border-green-100">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-green-100">
+              <div className="h-7 w-7 rounded-full bg-green-600 flex items-center justify-center">
+                <Sparkles className="h-3.5 w-3.5 text-white" />
+              </div>
+              <span className="text-sm font-medium text-green-900">
+                Roughnote AI
+              </span>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-end">
+                <div className="bg-green-100 rounded-2xl rounded-tr-sm px-4 py-2 text-sm text-green-900 max-w-[75%]">
+                  What was I feeling most last month?
+                </div>
+              </div>
+              <div className="flex justify-start">
+                <div className="bg-green-50 border border-green-100 rounded-2xl rounded-tl-sm px-4 py-2 text-sm text-green-800 max-w-[80%]">
+                  Based on your entries, you felt calm and reflective most often
+                  — especially on weekday evenings.
+                </div>
+              </div>
+              <div className="h-3 bg-green-50 rounded-full w-1/2 mt-2" />
+            </div>
+          </div>
+        </div>
+
+        {/* Reflection Questions Section */}
+        <div className="grid md:grid-cols-2 gap-12">
+          <div className="space-y-4 bg-white rounded-2xl shadow-xl p-6 border border-green-100">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                <MessageSquare className="h-4 w-4 text-green-700" />
+              </div>
+              <span className="text-sm font-semibold text-green-900">
+                Reflection Questions
+              </span>
+            </div>
+            <div className="space-y-3 pt-1">
+              {[
+                "What made today feel different from yesterday?",
+                "What emotion showed up most — and why?",
+                "What would you do differently?",
+              ].map((q) => (
+                <div
+                  key={q}
+                  className="flex items-start gap-3 bg-green-50 border border-green-100 rounded-xl px-4 py-3"
+                >
+                  <div className="h-2 w-2 rounded-full bg-green-500 mt-1.5 shrink-0" />
+                  <span className="text-sm text-green-800">{q}</span>
+                </div>
+              ))}
+            </div>
+            <div className="h-8 bg-green-100 rounded-full w-36 mt-2" />
+          </div>
+          <div className="space-y-6">
+            <div className="rounded-full bg-green-100 h-12 w-12 flex items-center justify-center">
+              <MessageSquare className="h-6 w-6 text-green-700" />
+            </div>
+            <h3 className="text-2xl font-bold text-green-900">
+              Reflection Questions
+            </h3>
+            <p className="text-lg text-green-700">
+              Deepen your mindfulness after every entry with AI-generated
+              prompts tailored to what you wrote:
+            </p>
+            <ul className="space-y-3">
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Generated uniquely for each entry</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Encourages deeper self-awareness</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-600" />
+                <span>Builds a mindful journaling habit</span>
+              </li>
+            </ul>
+          </div>
+        </div>
         <div className="grid md:grid-cols-2 gap-12">
           <div className="space-y-6">
             <div className="rounded-full bg-green-100 h-12 w-12 flex items-center justify-center">
@@ -191,6 +301,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
+
       <TestimonialCarousel />
 
       <div className="mt-24">
@@ -224,7 +335,10 @@ export default async function Home() {
               journaling.
             </p>
             <Link href="/dashboard">
-            <Button size="lg" variant="journal" className="animate-bounce">Get Started for Free <ChevronRight className="ml-2 h-4 w-4"/> </Button>
+              <Button size="lg" variant="journal" className="animate-bounce">
+                Get Started for Free{" "}
+                <ChevronRight className="ml-2 h-4 w-4" />{" "}
+              </Button>
             </Link>
           </CardContent>
         </Card>
