@@ -49,7 +49,7 @@ export default async function Home() {
   return (
     <div className="relative container mx-auto pt-16 pb-16">
       <div className="max-w-5xl mx-auto text-center space-y-8">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 text-[color:#155d27] font-bold">
           Your Space to Reflect. <br />
           Your Story to Tell.
         </h1>
