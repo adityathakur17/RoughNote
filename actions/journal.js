@@ -2,7 +2,6 @@
 
 import { getMoodById, MOODS } from "@/lib/moods";
 import { auth } from "@clerk/nextjs/server";
-import { getPixabayImage } from "./public";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { request } from "@arcjet/next";
@@ -52,7 +51,6 @@ export async function createJournalEntry(data) {
     if (!mood) {
       throw new Error("Invalid Mood");
     }
-    const moodImageUrl = await getPixabayImage(data.moodQuery);
 
     const entry = await db.entry.create({
       data: {
@@ -60,7 +58,6 @@ export async function createJournalEntry(data) {
         content: data.content,
         mood: mood.id,
         moodScore: mood.score,
-        moodImageUrl,
         userId: user.id,
         collectionId: data.collectionId || null,
       },
@@ -236,12 +233,6 @@ export async function updateJournalEntry(data) {
     const mood = MOODS[data.mood.toUpperCase()];
     if (!mood) throw new Error("Invalid mood");
 
-    let moodImageUrl = existingEntry.moodImageUrl;
-
-    if (existingEntry.mood !== mood.id) {
-      moodImageUrl = await getPixabayImage(data.moodQuery);
-    } //if existing entry mood is not equal to the current mood
-
     const updatedEntry = await db.entry.update({
       where:{
         id:data.id
@@ -251,7 +242,6 @@ export async function updateJournalEntry(data) {
         content: data.content,
         mood: mood.id,
         moodScore: mood.score,
-        moodImageUrl,
         userId: user.id,
         collectionId: data.collectionId || null,
       },

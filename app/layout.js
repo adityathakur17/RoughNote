@@ -1,10 +1,13 @@
 import Header from "@/components/header";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Gowun_Batang } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const gowunBatang = Gowun_Batang({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 export const metadata = {
   title: "RoughNote",
@@ -16,10 +19,9 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
 
     <html lang="en">
-      <body className={`${inter.className}`}>
-        <div className="inset-0 bg-[url('/bg.jpg')] opacity-50 fixed -z-10" />
+      <body className={`${gowunBatang.className} bg-[#F9F9F7]`}>
         <Header/>
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen bg-[#F9F9F7]">{children}</main>
         <Toaster richColors/>
 
         <footer className="bg-[color:#1a7431]/20 py-12">

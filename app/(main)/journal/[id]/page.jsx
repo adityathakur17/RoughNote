@@ -1,7 +1,6 @@
 import { getJournalEntry } from "@/actions/journal";
 import { getMoodById } from "@/lib/moods";
 import { format } from "date-fns";
-import Image from "next/image";
 import React from "react";
 import EditButton from "./_components/edit-button";
 import DeleteDialog from "./_components/delete-dialog";
@@ -14,23 +13,11 @@ const JournalEntryPage = async ({ params }) => {
   const mood = getMoodById(entry.mood);
   return (
     <>
-      {entry.moodImageUrl && (
-        <div className="relative h-48 md:h-64 w-full">
-          <Image
-            src={entry.moodImageUrl}
-            alt="Mood visualization"
-            className="object-cover"
-            fill
-            priority
-          />
-        </div>
-      )}
-
       <div className="p-6 space-y-6">
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
-              <h1 className="text-5xl font-bold gradient-title">
+              <h1 className="text-5xl font-bold">
                 {entry.title}
               </h1>
               <p className="text-gray-500">

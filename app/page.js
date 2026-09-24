@@ -47,9 +47,9 @@ export default async function Home() {
   const advice = await getDailyPrompt();
 
   return (
-    <div className="relative container mx-auto px-4 pt-16 pb-16">
+    <div className="relative container mx-auto pt-16 pb-16">
       <div className="max-w-5xl mx-auto text-center space-y-8">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 gradient-title">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6">
           Your Space to Reflect. <br />
           Your Story to Tell.
         </h1>
@@ -325,7 +325,7 @@ export default async function Home() {
       </div>
 
       <div className="mt-24">
-        <Card className="bg-gradient-to-r from-green-100 to-emerald-100">
+        <Card className="bg-green-100">
           <CardContent className="p-12 text-center">
             <h2 className="text-3xl font-bold text-green-900 mb-6">
               Start Reflecting on Your Journey Today

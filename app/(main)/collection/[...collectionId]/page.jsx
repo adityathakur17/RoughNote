@@ -19,7 +19,7 @@ const CollectionPage = async ({params}) => {
     <div className="space-y-6">
       <div className="flex flex-col justify-between">
         <div className="flex justify-between">
-          <h1 className="text-4xl font-bold gradient-title">
+          <h1 className="text-4xl font-bold">
             {collection.id === "unorganized"
               ? "Unorganized Entries"
               : collection?.name || "Collection"}

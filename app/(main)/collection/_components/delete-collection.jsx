@@ -47,7 +47,7 @@ function DeleteCollectionDialog({ collection, entriesCount = 0 }) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
+        <Button variant="outline" size="sm">
           <Trash2 className="h-4 w-4 mr-2" />
           Delete
         </Button>

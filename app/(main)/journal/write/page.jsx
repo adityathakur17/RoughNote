@@ -204,7 +204,6 @@ const JournalEntryPage = () => {
     actionFn({
       ...data,
       moodScore: mood.score,
-      moodQuery: mood.pixabayQuery,
       //if edit mode is on
       ...(isEditMode && { id: editId }),
     });
@@ -220,7 +219,7 @@ const JournalEntryPage = () => {
   return (
     <div className="py-8">
       <form className="space-y-4 mx-auto" onSubmit={onSubmit}>
-        <h1 className="text-5xl md:text-6xl gradient-title">
+        <h1 className="text-5xl md:text-6xl">
           {isEditMode ? "Edit Entry" : "What's on your mind?"}
         </h1>
 
@@ -408,7 +407,7 @@ const JournalEntryPage = () => {
                 e.preventDefault();
                 router.push(`/journal/${existingEntry.id}`);
               }}
-              variant="destructive"
+              variant="outline"
             >
               Cancel
             </Button>

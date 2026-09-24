@@ -13,8 +13,8 @@ const colorSchemes = {
   },
 
   collection: {
-    bg: "bg-blue-100 hover:bg-blue-50",
-    tab: "bg-blue-200 group-hover:bg-blue-300",
+    bg: "bg-[color:#145c2a]/30 hover:bg-[color:#145c2a]/20",
+    tab: "bg-[color:#1a7431]/40 group-hover:bg-[color:#145c2a]",
   },
 
   createCollection: {
